@@ -142,7 +142,9 @@ body {
 }
 
 .title-icon {
-  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
   filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.8));
 }
 
@@ -174,6 +176,9 @@ body {
 }
 
 .theme-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
@@ -210,8 +215,10 @@ body {
   color: var(--text);
 }
 
-.theme-emoji {
-  font-size: 1.2rem;
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--theme-color);
 }
 
 .theme-name {
@@ -312,8 +319,11 @@ body {
 }
 
 .start-button .button-icon {
-  font-size: 1.8rem;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.8));
 }
 
 .start-button .button-text {
@@ -408,7 +418,9 @@ body {
 }
 
 .filter-card-icon {
-  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--primary);
 }
 
 .filter-card-title {
@@ -429,6 +441,9 @@ body {
 }
 
 .filter-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -544,7 +559,9 @@ body {
 }
 
 .summary-icon {
-  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--primary);
 }
 
 .summary-text strong {
@@ -954,9 +971,11 @@ body {
 }
 
 .no-results-icon {
-  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
   margin-bottom: 1rem;
   opacity: 0.5;
+  color: var(--text-secondary);
 }
 
 .no-results p {

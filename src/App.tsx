@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StockSDK } from 'stock-sdk';
 import type { FullQuote } from 'stock-sdk';
+import { TrendingUp, Target, ChevronLeft, SearchX } from 'lucide-react';
 import { FilterCard } from './components/FilterCard';
 import { StartButton } from './components/StartButton';
 import { LoadingOverlay } from './components/LoadingOverlay';
@@ -108,7 +109,7 @@ function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="title-icon">🎲</span>
+          <TrendingUp className="title-icon" />
           <span className="title-text">一日持股法分析工具</span>
           <span className="title-glow" />
         </motion.h1>
@@ -144,7 +145,7 @@ function App() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <span className="summary-icon">🎯</span>
+                  <Target className="summary-icon" />
                   <span className="summary-text">
                     共筛选出 <strong>{stocks.length}</strong> 只符合条件的股票
                   </span>
@@ -158,7 +159,7 @@ function App() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span>◀</span> 重新筛选
+                  <ChevronLeft size={18} /> 重新筛选
                 </motion.button>
               </div>
 
@@ -180,7 +181,7 @@ function App() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <span className="no-results-icon">🔍</span>
+                  <SearchX className="no-results-icon" />
                   <p>没有找到符合条件的股票</p>
                   <p className="no-results-hint">请尝试调整筛选条件后重新分析</p>
                 </motion.div>

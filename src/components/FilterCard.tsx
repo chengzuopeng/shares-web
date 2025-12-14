@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SlidersHorizontal, Check } from 'lucide-react';
 import type { FilterConditions } from '../types';
 
 interface FilterCardProps {
@@ -100,7 +101,7 @@ export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
       whileHover={!isEditing ? { scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" } : undefined}
     >
       <div className="filter-card-header">
-        <span className="filter-card-icon">⚙️</span>
+        <SlidersHorizontal className="filter-card-icon" size={24} />
         <h3 className="filter-card-title">筛选条件</h3>
         <AnimatePresence mode="wait">
           {isEditing ? (
@@ -114,7 +115,7 @@ export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
-              ✓ 保存
+              <Check size={16} /> 保存
             </motion.button>
           ) : (
             <motion.span
