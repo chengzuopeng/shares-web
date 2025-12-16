@@ -108,8 +108,8 @@ function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="title-icon">📊</span>
-          <span className="title-text">股票智能分析系统</span>
+          <span className="title-icon">🎲</span>
+          <span className="title-text">一日持股法分析工具</span>
           <span className="title-glow" />
         </motion.h1>
         <ThemeSwitcher currentTheme={theme} onThemeChange={setTheme} />
@@ -204,7 +204,7 @@ function App() {
           rel="noopener noreferrer"
           className="footer-link"
         >
-          <img src="/upyun-logo.svg" alt="又拍云" className="footer-logo" />
+          <img src="/upyun-logo.png" alt="又拍云" className="footer-logo" />
         </a>
         <span className="footer-text">提供CDN加速/云存储服务</span>
       </footer>
