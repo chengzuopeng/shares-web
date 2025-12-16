@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Zap } from 'lucide-react';
 
 interface StartButtonProps {
   onClick: () => void;
@@ -28,7 +29,7 @@ export function StartButton({ onClick, isLoading }: StartButtonProps) {
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
-            ⚡
+            <Zap size={28} />
           </motion.span>
           <span className="button-text">开始分析</span>
         </span>
