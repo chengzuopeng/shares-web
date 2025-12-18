@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { ExternalLink } from 'lucide-react';
+import { TimelineChart } from './TimelineChart';
 import type { StockData } from '../types';
 
 interface StockCardProps {
@@ -50,7 +52,16 @@ export function StockCard({ stock, index }: StockCardProps) {
       {/* 卡片头部 */}
       <div className="stock-card-header">
         <div className="stock-info">
-          <h3 className="stock-name">{stock.name}</h3>
+          <a 
+            href={getXueqiuUrl(stock.code)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="stock-name-link"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="stock-name">{stock.name}</h3>
+            <ExternalLink size={14} className="stock-name-icon" />
+          </a>
           <span className="stock-code">{stock.code}</span>
         </div>
         <motion.div 
@@ -74,8 +85,23 @@ export function StockCard({ stock, index }: StockCardProps) {
           <span className="change-value">
             {isPositive ? '+' : ''}{formatNumber(stock.change)}
           </span>
+          {stock.timelineAboveAvgRatio !== undefined && (
+            <span className="timeline-ratio">
+              强度 {stock.timelineAboveAvgRatio.toFixed(0)}%
+            </span>
+          )}
         </div>
       </div>
+
+      {/* 分时图表 */}
+      {stock.timeline && stock.timeline.length > 0 && (
+        <div className="stock-timeline-section">
+          <TimelineChart 
+            data={stock.timeline} 
+            prevClose={stock.prevClose}
+          />
+        </div>
+      )}
 
       {/* 数据网格 */}
       <div className="stock-data-grid">
@@ -97,65 +123,11 @@ export function StockCard({ stock, index }: StockCardProps) {
         </div>
       </div>
 
-      {/* 价格区间 */}
-      <div className="stock-range">
-        <div className="range-item">
-          <span className="range-label">最高</span>
-          <span className="range-value high">{formatNumber(stock.high)}</span>
-        </div>
-        <div className="range-bar">
-          <div 
-            className="range-indicator"
-            style={{
-              left: `${((stock.price - stock.low) / (stock.high - stock.low || 1)) * 100}%`
-            }}
-          />
-        </div>
-        <div className="range-item">
-          <span className="range-label">最低</span>
-          <span className="range-value low">{formatNumber(stock.low)}</span>
-        </div>
-      </div>
-
-      {/* 额外指标 */}
-      <div className="stock-indicators">
-        <div className="indicator">
-          <span className="indicator-label">市盈率</span>
-          <span className="indicator-value">{formatNumber(stock.pe)}</span>
-        </div>
-        <div className="indicator">
-          <span className="indicator-label">市净率</span>
-          <span className="indicator-value">{formatNumber(stock.pb)}</span>
-        </div>
-        <div className="indicator">
-          <span className="indicator-label">开盘</span>
-          <span className="indicator-value">{formatNumber(stock.open)}</span>
-        </div>
-        <div className="indicator">
-          <span className="indicator-label">昨收</span>
-          <span className="indicator-value">{formatNumber(stock.prevClose)}</span>
-        </div>
-      </div>
-
-      {/* 雪球链接 */}
-      <motion.a
-        href={getXueqiuUrl(stock.code)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="xueqiu-link"
-        onClick={(e) => e.stopPropagation()}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <span className="xueqiu-icon">❄️</span>
-        <span className="xueqiu-text">查看雪球分时图</span>
-        <span className="xueqiu-arrow">→</span>
-      </motion.a>
-
       {/* 装饰元素 */}
       <div className="stock-card-glow" />
       <div className="stock-card-border" />
     </motion.div>
   );
 }
+
 
