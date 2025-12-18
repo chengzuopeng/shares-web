@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SlidersHorizontal, Check } from 'lucide-react';
+import { SlidersHorizontal, Check, ToggleLeft, ToggleRight, RotateCcw } from 'lucide-react';
 import type { FilterConditions } from '../types';
 
 interface FilterCardProps {
   filters: FilterConditions;
   onFiltersChange: (filters: FilterConditions) => void;
+  onReset: () => void;
 }
+
+type NumericFilterKey = Exclude<keyof FilterConditions, 'excludeST'>;
 
 interface FilterItemProps {
   label: string;
   minValue: number;
   maxValue?: number;
-  minKey: keyof FilterConditions;
-  maxKey?: keyof FilterConditions;
+  minKey: NumericFilterKey;
+  maxKey?: NumericFilterKey;
   unit?: string;
   isEditing: boolean;
   filters: FilterConditions;
-  onFilterChange: (key: keyof FilterConditions, value: number) => void;
+  onFilterChange: (key: NumericFilterKey, value: number) => void;
 }
 
 function FilterItem({ 
@@ -45,7 +48,7 @@ function FilterItem({
           <>
             <input
               type="number"
-              value={filters[minKey]}
+              value={filters[minKey] as number}
               onChange={(e) => onFilterChange(minKey, parseFloat(e.target.value) || 0)}
               className="filter-input"
             />
@@ -54,7 +57,7 @@ function FilterItem({
                 <span className="filter-separator">~</span>
                 <input
                   type="number"
-                  value={filters[maxKey]}
+                  value={filters[maxKey] as number}
                   onChange={(e) => onFilterChange(maxKey, parseFloat(e.target.value) || 0)}
                   className="filter-input"
                 />
@@ -73,10 +76,53 @@ function FilterItem({
   );
 }
 
-export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
+interface ToggleItemProps {
+  label: string;
+  value: boolean;
+  isEditing: boolean;
+  onChange: (value: boolean) => void;
+}
+
+function ToggleItem({ label, value, isEditing, onChange }: ToggleItemProps) {
+  return (
+    <motion.div 
+      className="filter-item filter-item-toggle"
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <span className="filter-label">{label}</span>
+      <div className="filter-value">
+        {isEditing ? (
+          <button 
+            className={`filter-toggle ${value ? 'active' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange(!value);
+            }}
+          >
+            {value ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
+            <span>{value ? '开启' : '关闭'}</span>
+          </button>
+        ) : (
+          <span className="filter-display">
+            {value ? '开启' : '关闭'}
+          </span>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+export function FilterCard({ filters, onFiltersChange, onReset }: FilterCardProps) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleFilterChange = (key: keyof FilterConditions, value: number) => {
+  const handleFilterChange = (key: NumericFilterKey, value: number) => {
+    onFiltersChange({ ...filters, [key]: value });
+  };
+
+  const handleToggleChange = (key: 'excludeST', value: boolean) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
@@ -91,6 +137,11 @@ export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
     setIsEditing(false);
   };
 
+  const handleReset = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onReset();
+  };
+
   return (
     <motion.div
       className={`filter-card ${isEditing ? 'editing' : ''}`}
@@ -103,32 +154,46 @@ export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
       <div className="filter-card-header">
         <SlidersHorizontal className="filter-card-icon" size={24} />
         <h3 className="filter-card-title">筛选条件</h3>
-        <AnimatePresence mode="wait">
-          {isEditing ? (
-            <motion.button
-              key="save"
-              className="filter-save-btn"
-              onClick={handleSave}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <Check size={16} /> 保存
-            </motion.button>
-          ) : (
-            <motion.span
-              key="hint"
-              className="filter-edit-hint"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              点击编辑
-            </motion.span>
-          )}
-        </AnimatePresence>
+        <div className="filter-header-actions">
+          <AnimatePresence mode="wait">
+            {isEditing ? (
+              <motion.div
+                key="editing-actions"
+                className="filter-actions"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+              >
+                <motion.button
+                  className="filter-reset-btn"
+                  onClick={handleReset}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <RotateCcw size={14} /> 恢复默认
+                </motion.button>
+                <motion.button
+                  className="filter-save-btn"
+                  onClick={handleSave}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Check size={16} /> 保存
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.span
+                key="hint"
+                className="filter-edit-hint"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                点击编辑
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
       
       <div className="filter-grid">
@@ -168,6 +233,21 @@ export function FilterCard({ filters, onFiltersChange }: FilterCardProps) {
           maxValue={filters.turnoverRateMax}
           minKey="turnoverRateMin"
           maxKey="turnoverRateMax"
+          unit="%"
+          isEditing={isEditing}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
+        <ToggleItem
+          label="过滤ST股票"
+          value={filters.excludeST}
+          isEditing={isEditing}
+          onChange={(value) => handleToggleChange('excludeST', value)}
+        />
+        <FilterItem
+          label="分时强度"
+          minValue={filters.timelineAboveAvgRatio}
+          minKey="timelineAboveAvgRatio"
           unit="%"
           isEditing={isEditing}
           filters={filters}

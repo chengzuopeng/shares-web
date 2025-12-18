@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Palette, Cpu, Sparkles, Sunset, Moon, type LucideIcon } from 'lucide-react';
+import { Palette, Cpu, Moon, Sun, type LucideIcon } from 'lucide-react';
 import type { Theme } from '../types';
 
 interface ThemeSwitcherProps {
@@ -9,8 +9,7 @@ interface ThemeSwitcherProps {
 
 const themes: { id: Theme; label: string; icon: LucideIcon; color: string }[] = [
   { id: 'cyber', label: '赛博朋克', icon: Cpu, color: '#00f0ff' },
-  { id: 'aurora', label: '极光幻境', icon: Sparkles, color: '#00ff88' },
-  { id: 'sunset', label: '落日熔金', icon: Sunset, color: '#ff6b35' },
+  { id: 'crystal', label: '晶莹剔透', icon: Sun, color: '#3b82f6' },
   { id: 'midnight', label: '午夜星空', icon: Moon, color: '#8b5cf6' },
 ];
 

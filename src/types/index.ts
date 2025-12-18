@@ -6,6 +6,14 @@ export interface FilterConditions {
   changePercentMax: number;
   turnoverRateMin: number;
   turnoverRateMax: number;
+  excludeST: boolean;
+  timelineAboveAvgRatio: number;
+}
+
+export interface TimelinePoint {
+  time: string;
+  price: number;
+  avgPrice: number;
 }
 
 export interface StockData {
@@ -26,9 +34,11 @@ export interface StockData {
   low: number;
   open: number;
   prevClose: number;
+  timeline?: TimelinePoint[];
+  timelineAboveAvgRatio?: number;
 }
 
-export type Theme = 'cyber' | 'aurora' | 'sunset' | 'midnight';
+export type Theme = 'cyber' | 'aurora' | 'sunset' | 'midnight' | 'crystal';
 
 export interface ThemeConfig {
   name: string;

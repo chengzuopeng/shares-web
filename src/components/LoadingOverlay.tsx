@@ -4,6 +4,7 @@ interface LoadingOverlayProps {
   progress: {
     completed: number;
     total: number;
+    stage?: string;
   };
 }
 
@@ -72,11 +73,11 @@ export function LoadingOverlay({ progress }: LoadingOverlayProps) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            正在扫描全市场股票数据...
+            {progress.stage || '正在扫描全市场股票数据...'}
           </motion.p>
           <p className="loading-detail">
             {progress.total > 0 
-              ? `已处理 ${progress.completed} / ${progress.total} 批次`
+              ? `已处理 ${progress.completed} / ${progress.total}`
               : '正在初始化连接...'
             }
           </p>
